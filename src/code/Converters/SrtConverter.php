@@ -86,7 +86,7 @@ class SrtConverter implements ConverterContract {
         }
 
         $only_seconds = strtotime("1970-01-01 {$parts[0]} UTC");
-        $milliseconds = (float)('0.' . $milliseconds_part);
+        $milliseconds = (float)('0.' . $parts[1]);
 
         $time = $only_seconds + $milliseconds;
 
