@@ -74,12 +74,13 @@ class SrtConverter implements ConverterContract {
         $parts = explode(',', $srt_time);
         if (count($parts) === 1) {
             //suggesting, that between seconds and milliseconds '.'
-            $milliseconds_part = explode('.', $srt_time);
+            $parts = explode('.', $srt_time);
             if (count($parts) === 1) {
-                //suggesting, seconds and milliseconds devide last ':' (total of 4) - format 00:00:00:105
-                $milliseconds_part = explode(':', $srt_time);
-                if (count($parts) == 4) {
-                    $milliseconds_part = $parts[3]; //milliseconds part here
+                //suggesting, seconds and milliseconds devided by last ':' (total of 4) - format 00:00:00:105
+                $parts = explode(':', $srt_time);
+                if (count($parts) === 4) {
+                    $last = array_pop($parts);
+                    $parts = array(implode(':', $parts), $last);
                 }
             }
         }
