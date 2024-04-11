@@ -1,6 +1,6 @@
 {
-    "name": "mantas-done/subtitles",
-    "description": "Subtitle converter and generator for PHP",
+    "name": "ipabro/subtitles",
+    "description": "Mantas-done subtitles fork. Subtitle converter and generator for PHP",
     "type": "library",
     "minimum-stability": "dev",
     "autoload": {
