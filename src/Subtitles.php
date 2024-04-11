@@ -7,6 +7,9 @@ interface SubtitleContract {
     public static function load($file_name_or_file_content, $extension = null); // load file
     public function save($file_name); // save file
     public function content($format); // output file content (instead of saving to file)
+    
+    public function getBlockByOrigLineNumber($origLineNumber);
+    public function removeBlockByOrigLineNumber($origLineNumber);
 
     public function add($start, $end, $text); // add one line or several
     public function remove($from, $till); // delete text from subtitles
@@ -39,7 +42,7 @@ class Subtitles implements SubtitleContract {
         if ($extension === null) {
             if (file_exists($file_name_or_file_content)) {
                 return static::loadFile($file_name_or_file_content);
-            }  
+            }
         }
 
         return static::loadString($file_name_or_file_content, $extension);
@@ -74,6 +77,27 @@ class Subtitles implements SubtitleContract {
     {
         foreach ($this->internal_format as $k => $block) {
             if ($this->shouldBlockBeRemoved($block, $from, $till)) {
+                unset($this->internal_format[$k]);
+            }
+        }
+
+        $this->internal_format = array_values($this->internal_format); // reorder keys
+
+        return $this;
+    }
+
+    public function getBlockByOrigLineNumber($origLineNumber){
+        foreach ($this->internal_format as $k => $block) {
+            if ($block['orig_line_number'] === $origLineNumber) {
+                return $block;
+            }
+        }
+        return false;
+    }
+
+    public function removeBlockByOrigLineNumber($origLineNumber){
+        foreach ($this->internal_format as $k => $block) {
+            if ($block['orig_line_number'] === $origLineNumber) {
                 unset($this->internal_format[$k]);
             }
         }
