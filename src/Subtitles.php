@@ -7,7 +7,7 @@ interface SubtitleContract {
     public static function load($file_name_or_file_content, $extension = null); // load file
     public function save($file_name); // save file
     public function content($format); // output file content (instead of saving to file)
-    
+
     public function getBlockByOrigLineNumber($origLineNumber);
     public function removeBlockByOrigLineNumber($origLineNumber);
 
@@ -86,9 +86,13 @@ class Subtitles implements SubtitleContract {
         return $this;
     }
 
+    //ЕСЛИ 2 ОДИНАКОВЫХ, ВОЗЬМЁМ ПОСЛЕДНИЙ, ТАМ ОБЫЧНО ПРЯЧЕТСЯ РЕКЛАМА. ПО-УМОЛЧАНИЮ УДАЛЯЕМ НЕ ПО НОМЕРУ БЛОКА, ПОЭТОМУ НЕВАЖНО. ИСПОЛЬЗУЕТСЯ ДЛЯ ПОКАЗА + ЕСЛИ УКАЖЕМ УДАЛИТЬ ПО НОМЕРУ БЛОКА
     public function getBlockByOrigLineNumber($origLineNumber){
         foreach ($this->internal_format as $k => $block) {
             if ($block['orig_line_number'] === $origLineNumber) {
+                if(isset($this->internal_format[$k+1]) && $this->internal_format[$k+1]['orig_line_number'] === $origLineNumber){
+                    return $this->internal_format[$k+1];
+                }
                 return $block;
             }
         }
