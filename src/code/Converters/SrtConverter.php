@@ -1,5 +1,7 @@
 <?php namespace Done\Subtitles;
 
+use PHPUnit\Event\InvalidArgumentException;
+
 class SrtConverter implements ConverterContract {
 
     /**
@@ -14,18 +16,18 @@ class SrtConverter implements ConverterContract {
 
         $blocks = explode("\n\n", trim($file_content)); // each block contains: start and end times + text
         foreach ($blocks as $k => $block) {
-            preg_match('/(?<orig_line_number>\d+)\n(?<start>.*) ?--> (?<end>.*)\n(?<text>(\n*.*)*)/m', $block, $matches);
+            preg_match('/(?<orig_line_number>\d+)\n(?<start>.*) ?--> (?<end>.*)\n(?<text>(\n*.*)*)/m', $block, $blockMatches);
 
             // if block doesn't contain text (invalid srt file given)
-            if (empty($matches)) {
+            if (empty($blockMatches)) {
                 continue;
             }
-
+            
             $internal_format[$k] = [
-                'orig_line_number' => (int)$matches['orig_line_number'],
-                'start' => static::srtTimeToInternal($matches['start']),
-                'end' => static::srtTimeToInternal($matches['end']),
-                'lines' => explode("\n", $matches['text']),
+                'orig_line_number' => (int)$blockMatches['orig_line_number'],
+                'start' => static::srtTimeToInternal($blockMatches['start']) ?? throw new InvalidArgumentException("Incorrect time - {$blockMatches['start']}"),
+                'end' => static::srtTimeToInternal($blockMatches['end']) ?? static::srtTimeToInternal($blockMatches['start'])+1,
+                'lines' => explode("\n", $blockMatches['text']),
             ];
         }
 
@@ -71,6 +73,8 @@ class SrtConverter implements ConverterContract {
      */
     protected static function srtTimeToInternal($srt_time)
     {
+        if(empty($srt_time)) return null;
+
         //suggesting, that between seconds and milliseconds ','
         $parts = explode(',', $srt_time);
         if (count($parts) === 1) {
@@ -87,10 +91,10 @@ class SrtConverter implements ConverterContract {
         }
 
         $only_seconds = strtotime("1970-01-01 {$parts[0]} UTC");
+//        if(!isset($parts[1])) dd($parts, $only_seconds, $srt_time);
         $milliseconds = (float)('0.' . $parts[1]);
 
         $time = $only_seconds + $milliseconds;
-
         return $time;
     }
 
