@@ -227,7 +227,6 @@ class Subtitles implements SubtitleContract {
         $converter->input = Helpers::normalizeNewLines(Helpers::removeUtf8Bom($text));
 
         $converter->input_format = $extension;
-
         $input_converter = Helpers::getConverter($extension);
         $converter->internal_format = $input_converter->fileContentToInternalFormat($converter->input);
 
