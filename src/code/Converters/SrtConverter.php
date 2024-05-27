@@ -1,7 +1,5 @@
 <?php namespace Done\Subtitles;
 
-use PHPUnit\Event\InvalidArgumentException;
-
 class SrtConverter implements ConverterContract {
 
     /**
@@ -22,10 +20,10 @@ class SrtConverter implements ConverterContract {
             if (empty($blockMatches)) {
                 continue;
             }
-            
+
             $internal_format[$k] = [
                 'orig_line_number' => (int)$blockMatches['orig_line_number'],
-                'start' => static::srtTimeToInternal($blockMatches['start']) ?? throw new InvalidArgumentException("Incorrect time - {$blockMatches['start']}"),
+                'start' => static::srtTimeToInternal($blockMatches['start']) ?? throw new \InvalidArgumentException("Incorrect time - {$blockMatches['start']}"),
                 'end' => static::srtTimeToInternal($blockMatches['end']) ?? static::srtTimeToInternal($blockMatches['start'])+1,
                 'lines' => explode("\n", $blockMatches['text']),
             ];
