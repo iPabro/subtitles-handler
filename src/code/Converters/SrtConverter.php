@@ -1,6 +1,6 @@
 <?php namespace Done\Subtitles;
 
-use Done\Subtitles\Exceptions\BadFormatException;
+use Done\Subtitles\Exceptions\BadSubFormatException;
 
 class SrtConverter implements ConverterContract {
 
@@ -32,7 +32,7 @@ class SrtConverter implements ConverterContract {
         }
 
         if(empty($internal_format)){
-            throw new BadFormatException();
+            throw new BadSubFormatException('Invalid .srt format');
         }
 
         return $internal_format;
