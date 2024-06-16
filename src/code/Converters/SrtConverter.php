@@ -1,5 +1,7 @@
 <?php namespace Done\Subtitles;
 
+use Done\Subtitles\Exceptions\BadFormatException;
+
 class SrtConverter implements ConverterContract {
 
     /**
@@ -27,6 +29,10 @@ class SrtConverter implements ConverterContract {
                 'end' => static::srtTimeToInternal($blockMatches['end']) ?? static::srtTimeToInternal($blockMatches['start'])+1,
                 'lines' => explode("\n", $blockMatches['text']),
             ];
+        }
+
+        if(empty($internal_format)){
+            throw new BadFormatException();
         }
 
         return $internal_format;
