@@ -16,7 +16,8 @@ class SrtConverter implements ConverterContract {
 
         $blocks = explode("\n\n", trim($file_content)); // each block contains: start and end times + text
         foreach ($blocks as $k => $block) {
-            preg_match('/(?<orig_line_number>\d+)\n(?<start>.*) ?--> (?<end>.*)\n(?<text>(\n*.*)*)/m', $block, $blockMatches);
+            preg_match('/(?<orig_line_number>\d+)?[^|\n](?<start>.*) ?--> (?<end>.*)\n(?<text>(\n*.*)*)/m', $block, $blockMatches);
+//            preg_match('/\n?(?<start>.*) ?--> (?<end>.*)\n(?<text>(\n*.*)*)/m', $block, $blockMatches);
 
             // if block doesn't contain text (invalid srt file given)
             if (empty($blockMatches)) {
@@ -24,13 +25,13 @@ class SrtConverter implements ConverterContract {
             }
 
             $internal_format[$k] = [
-                'orig_line_number' => (int)$blockMatches['orig_line_number'],
+//                'orig_line_number' => (int)$blockMatches['orig_line_number'] ?: null,
                 'start' => static::srtTimeToInternal($blockMatches['start']) ?? throw new \InvalidArgumentException("Incorrect time - {$blockMatches['start']}"),
                 'end' => static::srtTimeToInternal($blockMatches['end']) ?? static::srtTimeToInternal($blockMatches['start'])+1,
                 'lines' => explode("\n", $blockMatches['text']),
             ];
         }
-
+//        dd($internal_format);
         if(empty($internal_format)){
             throw new BadSubFormatException('Invalid .srt format');
         }
