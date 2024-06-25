@@ -86,10 +86,13 @@ class Subtitles implements SubtitleContract {
         return $this;
     }
 
-    //ЕСЛИ 2 ОДИНАКОВЫХ, ВОЗЬМЁМ ПОСЛЕДНИЙ, ТАМ ОБЫЧНО ПРЯЧЕТСЯ РЕКЛАМА. ПО-УМОЛЧАНИЮ УДАЛЯЕМ НЕ ПО НОМЕРУ БЛОКА, ПОЭТОМУ НЕВАЖНО. ИСПОЛЬЗУЕТСЯ ДЛЯ ПОКАЗА + ЕСЛИ УКАЖЕМ УДАЛИТЬ ПО НОМЕРУ БЛОКА
+    /*
+НА ОРИГИНАЛЬНЫЕ НОМЕРА ЛИНИЙ ЛУЧШЕ НЕ ОПИРАТЬСЯ, Т.К. ИНОГДА ОНИ ДУБЛИРУЮТСЯ, А ИНОГДА ИХ ВООБЩЕ НЕТ. МОЖНО ОРИЕНТИРОВАТЬЯ НЕ НА ОРИГИНАЛЬНЫЕ - КОГДА УЖЕ ПРЕОБРАЗОВАЛ СУБТИТР К НОРМАЛЬНОМУ ФОРМАТУ! ПОКА ЗАКОММЕНТИЛ, ЕСЛИ НУЖНО БУДЕТ ПО НОМЕРАМ ЦИФР ОРИЕНТИРОВАТЬСЯ, ПЕРЕДЕЛАЙ ЧТОБ ОРИЕНТИРОВАЛОСЬ НА НОВЫЕ НОМЕРА
+     *
+     * //ЕСЛИ 2 ОДИНАКОВЫХ, ВОЗЬМЁМ ПОСЛЕДНИЙ, ТАМ ОБЫЧНО ПРЯЧЕТСЯ РЕКЛАМА. ПО-УМОЛЧАНИЮ УДАЛЯЕМ НЕ ПО НОМЕРУ БЛОКА, ПОЭТОМУ НЕВАЖНО. ИСПОЛЬЗУЕТСЯ ДЛЯ ПОКАЗА + ЕСЛИ УКАЖЕМ УДАЛИТЬ ПО НОМЕРУ БЛОКА
     public function getBlockByOrigLineNumber($origLineNumber){
         foreach ($this->internal_format as $k => $block) {
-            if ($block['orig_line_number'] === $origLineNumber) {
+            if (!is_null($block['orig_line_number']) && $block['orig_line_number'] === $origLineNumber) {
                 if(isset($this->internal_format[$k+1]) && $this->internal_format[$k+1]['orig_line_number'] === $origLineNumber){
                     return $this->internal_format[$k+1];
                 }
@@ -109,7 +112,7 @@ class Subtitles implements SubtitleContract {
         $this->internal_format = array_values($this->internal_format); // reorder keys
 
         return $this;
-    }
+    }*/
 
     public function shiftTime($seconds, $from = 0, $till = null)
     {
@@ -225,7 +228,6 @@ class Subtitles implements SubtitleContract {
     {
         $converter = new static;
         $converter->input = Helpers::normalizeNewLines(Helpers::removeUtf8Bom($text));
-
         $converter->input_format = $extension;
         $input_converter = Helpers::getConverter($extension);
         $converter->internal_format = $input_converter->fileContentToInternalFormat($converter->input);
