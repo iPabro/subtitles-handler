@@ -17,7 +17,7 @@ class SrtConverter implements ConverterContract {
         $blocks = explode("\n\n", trim($file_content)); // each block contains: start and end times + text
         foreach ($blocks as $k => $block) {
            // preg_match('/(?<orig_line_number>\d+)?(?:^|\n)(?<start>.*) ?--> (?<end>.*)\n(?<text>(\n*.*)*)/m', $block, $blockMatches);
-            preg_match('/\n(?<start>.*) ?--> (?<end>.*)\n(?<text>(\n*.*)*)/m', $block, $blockMatches);
+            preg_match('/(?:^|\n)(?<start>.*) ?--> (?<end>.*)\n(?<text>(\n*.*)*)/m', $block, $blockMatches);
 //            preg_match('/\n(?<start>.*) ?--> (?<end>.*)\n(?<text>(\n*.*)*)/m', $block, $blockMatches);
 
             // if block doesn't contain text (invalid srt file given)
