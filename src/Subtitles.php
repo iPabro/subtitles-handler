@@ -8,8 +8,8 @@ interface SubtitleContract {
     public function save($file_name); // save file
     public function content($format); // output file content (instead of saving to file)
 
-    public function getBlockByOrigLineNumber($origLineNumber);
-    public function removeBlockByOrigLineNumber($origLineNumber);
+//    public function getBlockByOrigLineNumber($origLineNumber);
+//    public function removeBlockByOrigLineNumber($origLineNumber);
 
     public function add($start, $end, $text); // add one line or several
     public function remove($from, $till); // delete text from subtitles
