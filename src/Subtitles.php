@@ -90,7 +90,8 @@ class Subtitles implements SubtitleContract {
     public function removeBlockByKey($key)
     {
         unset($this->internal_format[$key]);
-        $this->internal_format = array_values($this->internal_format); // reorder keys
+        //КЛЮЧИ НЕ ПЕРЕОПРЕДЕЛЯЙ, Т.К. РЕКЛАМУ В ЦИКЛЕ УДАЛЯЕМ И ВСЁ СДВИНЕТСЯ - удалится не тот блок!!!
+        //$this->internal_format = array_values($this->internal_format); // reorder keys
         return $this;
     }
 
