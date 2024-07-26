@@ -28,7 +28,7 @@ class SrtConverter implements ConverterContract {
                 continue;
             }
 
-            $startTime = static::srtTimeToInternal($blockMatches['start']) ?? throw new \BadSubFormatException("Incorrect time - {$blockMatches['start']}");
+            $startTime = static::srtTimeToInternal($blockMatches['start']) ?? throw new BadSubFormatException("Incorrect time - {$blockMatches['start']}");
             $endTime = static::srtTimeToInternal($blockMatches['end']) ?? static::srtTimeToInternal($blockMatches['start'])+1;
             $lines = explode("\n", $blockMatches['text']);
 
