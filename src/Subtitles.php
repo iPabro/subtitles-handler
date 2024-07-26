@@ -12,7 +12,8 @@ interface SubtitleContract {
 //    public function removeBlockByOrigLineNumber($origLineNumber);
 
     public function add($start, $end, $text); // add one line or several
-    public function remove($from, $till); // delete text from subtitles
+    public function remove($from, $till); // delete text from subtitles by time
+    public function removeBlockByKey($key); // delete text from subtitles by block key
     public function shiftTime($seconds, $from = 0, $till = null); // add or subtract some amount of seconds from all times
     public function shiftTimeGradually($seconds_to_shift, $from = 0, $till = null);
 
@@ -83,6 +84,13 @@ class Subtitles implements SubtitleContract {
 
         $this->internal_format = array_values($this->internal_format); // reorder keys
 
+        return $this;
+    }
+
+    public function removeBlockByKey($key)
+    {
+        unset($this->internal_format[$key]);
+        $this->internal_format = array_values($this->internal_format); // reorder keys
         return $this;
     }
 
