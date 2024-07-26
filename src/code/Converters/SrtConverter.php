@@ -17,6 +17,7 @@ class SrtConverter implements ConverterContract {
         $blocks = explode("\n\n", trim($file_content)); // each block contains: start and end times + text
         if(count($blocks) < 50){
             //бывает, что блоки разделены не \n\n, а одним \n и тогда всего один блок на выходе. Хотя может быть и такое, что одни блоки двойным а другие одинарным разделены, это мы косвенно проверяем в количестве строк в $lines (если много, значит разбито одинарным)
+            dd($blocks);
             throw new BadSubFormatException('Invalid .srt format');
         }
         $previousBlockEndTime = -1;
@@ -34,11 +35,7 @@ class SrtConverter implements ConverterContract {
             $endTime = static::srtTimeToInternal($blockMatches['end']) ?? static::srtTimeToInternal($blockMatches['start'])+1;
             $lines = explode("\n", $blockMatches['text']);
 
-            if($startTime > $endTime or $startTime < $previousBlockEndTime){
-//                dump($blockMatches['start'], $startTime, $endTime, $previousBlockEndTime, $k);
-                throw new BadSubFormatException('Invalid .srt format');
-            }
-            if(count($lines > 15)){
+            if(count($lines) > 15){
                 throw new BadSubFormatException('Invalid .srt format');
             }
 
@@ -48,7 +45,6 @@ class SrtConverter implements ConverterContract {
                 'end' => $endTime,
                 'lines' => $lines
             ];
-            $previousBlockEndTime = $endTime;
         }
 //        dd();
 //        dd($internal_format);
