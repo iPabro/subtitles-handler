@@ -28,7 +28,7 @@ class SrtConverter implements ConverterContract {
                 continue;
             }
 
-            $startTime = static::srtTimeToInternal($blockMatches['start']) ?? throw new \InvalidArgumentException("Incorrect time - {$blockMatches['start']}");
+            $startTime = static::srtTimeToInternal($blockMatches['start']) ?? throw new \BadSubFormatException("Incorrect time - {$blockMatches['start']}");
             $endTime = static::srtTimeToInternal($blockMatches['end']) ?? static::srtTimeToInternal($blockMatches['start'])+1;
             $lines = explode("\n", $blockMatches['text']);
 
@@ -107,13 +107,13 @@ class SrtConverter implements ConverterContract {
                     $last = array_pop($parts);
                     $parts = array(implode(':', $parts), $last);
                 }elseif(count($parts) === 1){
-                    throw new InvalidArgumentException('time has invalid format - ' . $srt_time);
+                    throw new BadSubFormatException('time has invalid format - ' . $srt_time);
                 }
             }
         }
 
         $only_seconds = strtotime("1970-01-01 {$parts[0]} UTC");
-        if(!isset($parts[1])) dd($parts, $only_seconds, $srt_time);
+//        if(!isset($parts[1])) dd($parts, $only_seconds, $srt_time);
         $milliseconds = (float)('0.' . $parts[1]);
 
         $time = $only_seconds + $milliseconds;
