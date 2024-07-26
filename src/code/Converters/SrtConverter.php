@@ -1,6 +1,7 @@
 <?php namespace Done\Subtitles;
 
 use Done\Subtitles\Exceptions\BadSubFormatException;
+use PHPUnit\Event\InvalidArgumentException;
 
 class SrtConverter implements ConverterContract {
 
@@ -15,11 +16,7 @@ class SrtConverter implements ConverterContract {
         $internal_format = []; // array - where file content will be stored
 
         $blocks = explode("\n\n", trim($file_content)); // each block contains: start and end times + text
-//        if(count($blocks) < 50){
-//            //бывает, что блоки разделены не \n\n, а одним \n и тогда всего один блок на выходе. Хотя может быть и такое, что одни блоки двойным а другие одинарным разделены, это мы косвенно проверяем в количестве строк в $lines (если много, значит разбито одинарным)
-            //ЗАКОММЕНТИЛ Т.К. ЕСТЬ КОРОТКИЕ СУБТИТРЫ, ЧАРЛИ ЧАПЛИН НАПРИМЕР
-//            throw new BadSubFormatException('Invalid .srt format');
-//        }
+
         $previousBlockEndTime = -1;
         foreach ($blocks as $k => $block) {
            // preg_match('/(?<orig_line_number>\d+)?(?:^|\n)(?<start>.*) ?--> (?<end>.*)\n(?<text>(\n*.*)*)/m', $block, $blockMatches);
@@ -36,6 +33,8 @@ class SrtConverter implements ConverterContract {
             $lines = explode("\n", $blockMatches['text']);
 
             if(count($lines) > 15){
+                //такое бывает, когда блоки не разделены \n\n, а например одним \n или \nПРОБЕЛ\n
+                dump($lines, $block);
                 throw new BadSubFormatException('Invalid .srt format');
             }
 
@@ -107,12 +106,14 @@ class SrtConverter implements ConverterContract {
                 if (count($parts) === 4) {
                     $last = array_pop($parts);
                     $parts = array(implode(':', $parts), $last);
+                }elseif(count($parts) === 1){
+                    throw new InvalidArgumentException('time has invalid format - ' . $srt_time);
                 }
             }
         }
 
         $only_seconds = strtotime("1970-01-01 {$parts[0]} UTC");
-//        if(!isset($parts[1])) dd($parts, $only_seconds, $srt_time);
+        if(!isset($parts[1])) dd($parts, $only_seconds, $srt_time);
         $milliseconds = (float)('0.' . $parts[1]);
 
         $time = $only_seconds + $milliseconds;
@@ -131,7 +132,7 @@ class SrtConverter implements ConverterContract {
     {
         $parts = explode('.', $internal_time); // 1.23
         $whole = $parts[0]; // 1
-        $decimal = isset($parts[1]) ? substr($parts[1], 0, 3) : 0; // 23
+//        $decimal = isset($parts[1]) ? substr($parts[1], 0, 3) : 0; // 23
 
         $srt_time = gmdate("H:i:s", floor($whole)) . ',' . str_pad($decimal, 3, '0', STR_PAD_RIGHT);
 
