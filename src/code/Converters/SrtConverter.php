@@ -15,11 +15,11 @@ class SrtConverter implements ConverterContract {
         $internal_format = []; // array - where file content will be stored
 
         $blocks = explode("\n\n", trim($file_content)); // each block contains: start and end times + text
-        if(count($blocks) < 50){
-            //бывает, что блоки разделены не \n\n, а одним \n и тогда всего один блок на выходе. Хотя может быть и такое, что одни блоки двойным а другие одинарным разделены, это мы косвенно проверяем в количестве строк в $lines (если много, значит разбито одинарным)
-            dd($blocks);
-            throw new BadSubFormatException('Invalid .srt format');
-        }
+//        if(count($blocks) < 50){
+//            //бывает, что блоки разделены не \n\n, а одним \n и тогда всего один блок на выходе. Хотя может быть и такое, что одни блоки двойным а другие одинарным разделены, это мы косвенно проверяем в количестве строк в $lines (если много, значит разбито одинарным)
+            //ЗАКОММЕНТИЛ Т.К. ЕСТЬ КОРОТКИЕ СУБТИТРЫ, ЧАРЛИ ЧАПЛИН НАПРИМЕР
+//            throw new BadSubFormatException('Invalid .srt format');
+//        }
         $previousBlockEndTime = -1;
         foreach ($blocks as $k => $block) {
            // preg_match('/(?<orig_line_number>\d+)?(?:^|\n)(?<start>.*) ?--> (?<end>.*)\n(?<text>(\n*.*)*)/m', $block, $blockMatches);
