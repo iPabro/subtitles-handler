@@ -31,7 +31,7 @@ class Helpers
             throw new \Exception('unknown format: ' . $extension);
         }
 
-        $full_class_name = "\\Done\\Subtitles\\" . $class_name;
+        $full_class_name = "\\Ipabro\\SubtitlesConverter\\Converters\\" . $class_name;
 
         return new $full_class_name();
     }
