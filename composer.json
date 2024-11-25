@@ -15,8 +15,5 @@
         "files": [
             "./tests/helpers/AdditionalAssertions.php"
         ]
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^6.0"
     }
 }
