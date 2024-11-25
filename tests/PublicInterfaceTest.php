@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Done\Subtitles\Subtitles;
+use Ipabro\SubtitlesConverter\Subtitles;
 
 class PublicInterfaceTest extends TestCase {
 

@@ -1,6 +1,6 @@
 <?php
 
-use Done\Subtitles\Subtitles;
+use Ipabro\SubtitlesConverter\Subtitles;
 use PHPUnit\Framework\TestCase;
 
 class SubTest extends TestCase {

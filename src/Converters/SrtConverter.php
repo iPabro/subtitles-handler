@@ -1,6 +1,6 @@
-<?php namespace Done\Subtitles;
+<?php namespace Ipabro\SubtitlesConverter\Converters;
 
-use Done\Subtitles\Exceptions\BadSubFormatException;
+use Ipabro\SubtitlesConverter\Exceptions\BadSubFormatException;
 use PHPUnit\Event\InvalidArgumentException;
 
 class SrtConverter implements ConverterContract {

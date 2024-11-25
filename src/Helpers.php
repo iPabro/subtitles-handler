@@ -1,4 +1,4 @@
-<?php namespace Done\Subtitles;
+<?php namespace Ipabro\SubtitlesConverter;
 
 class Helpers
 {

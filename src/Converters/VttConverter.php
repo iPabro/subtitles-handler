@@ -1,4 +1,4 @@
-<?php namespace Done\Subtitles;
+<?php namespace Ipabro\SubtitlesConverter\Converters;
 
 class VttConverter implements ConverterContract {
 

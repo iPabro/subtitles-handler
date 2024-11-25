@@ -1,11 +1,11 @@
-<?php namespace Done\Subtitles;
+<?php namespace Ipabro\SubtitlesConverter;
 
 interface SubtitleContract {
 
     public static function convert($from_file_path, $to_file_path);
 
     public static function load($file_name_or_file_content, $extension = null); // load file
-    public function save($file_name); // save file
+    public function save($path); // save file
     public function content($format); // output file content (instead of saving to file)
 
 //    public function getBlockByOrigLineNumber($origLineNumber);
