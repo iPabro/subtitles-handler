@@ -20,7 +20,7 @@ Convert and edit subtitles and captions.
 
 ## Installation
 ```
-composer require mantas-done/subtitles
+composer require ipabro/subtitles-converter
 ```
 
 ## Usage
