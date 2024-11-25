@@ -2,7 +2,7 @@
 
 namespace Ipabro\SubtitlesConverter\Converters;
 
-class MyWebConverter
+class MywebConverter
 {
     public function internalFormatToFileContent(array $internal_format)
     {
